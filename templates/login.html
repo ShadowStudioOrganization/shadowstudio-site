@@ -36,16 +36,16 @@
                         影之末登录
 					</span>
 
-					<div class="wrap-input100 validate-input" data-validate = "邮箱格式不正确 例子：842355358@qq.com">
-						<input class="input100" type="text" name="email" placeholder="邮箱/用户/手机">
+					<div class="wrap-input100 validate-input">
+						<input class="input100" id="login-email" type="text" name="email" placeholder="邮箱">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-envelope" aria-hidden="true"></i>
 						</span>
 					</div>
 
-					<div class="wrap-input100 validate-input" data-validate = "需要密码">
-						<input class="input100" type="password" name="pass" placeholder="密码">
+					<div class="wrap-input100 validate-input">
+						<input class="input100" id="login-password" type="password" name="pass" placeholder="密码">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-lock" aria-hidden="true"></i>
@@ -93,6 +93,87 @@
 		$('.js-tilt').tilt({
 			scale: 1.1
 		})
+
+		$("#signup-submit").on("click", function(e){ try{
+          var email = $("#login-email")[0].value;
+		  var psw = $("#login-password")[0].value;
+          e.preventDefault();
+
+          if (email === "" || email === null) {
+		    // 登录账户为空
+            $("#alerttext").text("请输入邮箱");
+            $("#alert").attr("style","display:block;");
+            $("#signup-confirm-psw").val("");
+            $("#signup-psw").val("");
+            return;
+		  }
+          if (psw === "" || psw === null) {
+		    // 密码为空
+            $("#alerttext").text("请输入密码");
+            $("#alert").attr("style","display:block;");
+			$("#signup-confirm-psw").val("");
+			return;
+		  }
+		  if (isEmail(email)) {
+		  }
+		   else {
+		    // 未匹配
+            $("#alerttext").text("请输入正确的邮件格式");
+            $("#alert").attr("style","display:block;");
+            $("#signup-confirm-psw").val("");
+            $("#signup-psw").val("");
+			return;
+		  }
+
+          $.getJSON($SCRIPT_ROOT + '/_login', {
+              password : psw,
+              email : email
+          }, function(data) {
+            if (data.result === 1){
+                $("#alerttext").html("成功登录，3秒后返回<a href='..'>主页</a>");
+                $("#alert").attr("class","alert alert-success alert-dismissible fade show");
+                $("#alert").attr("style","display:block;");
+                setTimeout(function(){
+                    window.location.replace("..");
+                }, 3000);
+            }
+            if (data.result === 2){
+                $("#alerttext").text("邮箱与密码不匹配");
+                $("#alert").attr("style","display:block;");
+            }
+            if (data.result === 3){
+                $("#alerttext").text("其他错误");
+                $("#alert").attr("style","display:block;");
+            }
+          });
+
+
+
+
+
+		  }catch(_){console.log(_);}
+
+		});
+
+
+		 function isEmail(str){
+		   var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+		   return reg.test(str);
+		 }
+
+		 function isUserName(str){
+		   var reg = /^\w{3,15}$/;
+		   return reg.test(str);
+		 }
+		 function isSafetyPass(str){
+		   if (str.length < 4){
+		       return false;
+           }
+           if (str.length > 21){
+		       return false;
+           }
+		   return true;
+		 }
 	</script>
 <!--===============================================================================================-->
 	<script src="/static/js/main.js"></script>
