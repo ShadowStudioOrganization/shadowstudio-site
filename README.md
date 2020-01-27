@@ -1,6 +1,6 @@
 # Shadow Studio Website is around the corner!
 
-|English| |[简体中文](readme-cn.md)|
+|English| |[简体中文](README-cn.md)|
 
 Here's our official website source code. By viewing the files you can find that we are now working on this developing project. It will take us some time to make the source code into a real website. If you are willing to help us or you find some bugs during that time, just fork it and pull request. We will appreciate it a lot on that occasion.
 
