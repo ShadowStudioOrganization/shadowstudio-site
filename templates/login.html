@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>登录</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="/static/images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="/static/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/static/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100" style="background:transparent">
+				<div class="login100-pic js-tilt" data-tilt>
+					<img src="/static/img/logo/origin-logo.png" alt="IMG">
+				</div>
+
+				<form class="login100-form validate-form" method='POST'>
+					<span class="login100-form-title">
+                        影之末登录
+					</span>
+
+					<div class="wrap-input100 validate-input">
+						<input class="input100" id="login-email" type="text" name="email" placeholder="邮箱">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
+					</div>
+
+					<div class="wrap-input100 validate-input">
+						<input class="input100" id="login-password" type="password" name="pass" placeholder="密码">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div>
+					
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn">
+							登录
+						</button>
+					</div>
+
+					<div class="text-center p-t-12">
+						<span class="txt1">
+							忘记
+						</span>
+						<a class="txt2" href="#">
+							密码？
+						</a>
+					</div>
+
+					<div class="text-center p-t-136">
+						<a class="txt2" href="#">
+							创建账户
+							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+						</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+
+	
+<!--===============================================================================================-->	
+	<script src="/static/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/static/vendor/bootstrap/js/popper.js"></script>
+	<script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/static/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/static/vendor/tilt/tilt.jquery.min.js"></script>
+	<script >
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+
+		$("#signup-submit").on("click", function(e){ try{
+          var email = $("#login-email")[0].value;
+		  var psw = $("#login-password")[0].value;
+          e.preventDefault();
+
+          if (email === "" || email === null) {
+		    // 登录账户为空
+            $("#alerttext").text("请输入邮箱");
+            $("#alert").attr("style","display:block;");
+            $("#signup-confirm-psw").val("");
+            $("#signup-psw").val("");
+            return;
+		  }
+          if (psw === "" || psw === null) {
+		    // 密码为空
+            $("#alerttext").text("请输入密码");
+            $("#alert").attr("style","display:block;");
+			$("#signup-confirm-psw").val("");
+			return;
+		  }
+		  if (isEmail(email)) {
+		  }
+		   else {
+		    // 未匹配
+            $("#alerttext").text("请输入正确的邮件格式");
+            $("#alert").attr("style","display:block;");
+            $("#signup-confirm-psw").val("");
+            $("#signup-psw").val("");
+			return;
+		  }
+
+          $.getJSON($SCRIPT_ROOT + '/_login', {
+              password : psw,
+              email : email
+          }, function(data) {
+            if (data.result === 1){
+                $("#alerttext").html("成功登录，3秒后返回<a href='..'>主页</a>");
+                $("#alert").attr("class","alert alert-success alert-dismissible fade show");
+                $("#alert").attr("style","display:block;");
+                setTimeout(function(){
+                    window.location.replace("..");
+                }, 3000);
+            }
+            if (data.result === 2){
+                $("#alerttext").text("邮箱与密码不匹配");
+                $("#alert").attr("style","display:block;");
+            }
+            if (data.result === 3){
+                $("#alerttext").text("其他错误");
+                $("#alert").attr("style","display:block;");
+            }
+          });
+
+
+
+
+
+		  }catch(_){console.log(_);}
+
+		});
+
+
+		 function isEmail(str){
+		   var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+		   return reg.test(str);
+		 }
+
+		 function isUserName(str){
+		   var reg = /^\w{3,15}$/;
+		   return reg.test(str);
+		 }
+		 function isSafetyPass(str){
+		   if (str.length < 4){
+		       return false;
+           }
+           if (str.length > 21){
+		       return false;
+           }
+		   return true;
+		 }
+	</script>
+<!--===============================================================================================-->
+	<script src="/static/js/main.js"></script>
+
+</body>
+</html>
